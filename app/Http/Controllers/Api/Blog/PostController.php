@@ -55,4 +55,18 @@ class PostController extends Controller
             ],
         ]);
     }
+    public function show(string $id)
+    {
+        $post = BlogPost::with(['user:id,name', 'category:id,title'])->findOrFail($id);
+
+        return response()->json([
+            'id' => $post->id,
+            'title' => $post->title,
+            'slug' => $post->slug,
+            'is_published' => $post->is_published,
+            'user' => ['name' => $post->user->name ?? 'Невідомо'],
+            'category' => ['title' => $post->category->title ?? 'Без категорії'],
+            'content_html' => $post->content_html ?? '', // додано
+        ]);
+    }
 }
